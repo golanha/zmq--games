@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zmq-client
+  labels:
+    app: zmq-testing
+    role: client
+spec:
+  selector:
+    matchLabels:
+      app: zmq-testing
+      role: client
+  replicas: 120
+  template:
+    metadata:
+      labels:
+        app: zmq-testing
+        role: client
+    spec:
+      containers:
+      - name: client
+        image: golanlia/zmqclient:v0.0.1
+        ports:
+        - name:  client
+          containerPort:  5556
+          protocol: TCP
+        env:
+        - name: WORK_TIME_MS
+          value: "100"

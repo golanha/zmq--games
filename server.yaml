@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zmq-server
+  labels:
+    app: zmq-testing
+    role: server
+spec:
+  selector:
+    matchLabels:
+      app: zmq-testing
+      role: server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zmq-testing
+        role: server
+    spec:
+      containers:
+      - name: server
+        image: golanlia/zmqserver:v0.0.1
+        env:
+        - name: WORK_TIME_MS
+          value: "100"
+        - name: DATA_SIZE
+          value: "1000000"
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  server-svc
+spec:
+  selector:
+    app:  zmq-testing
+    role: server
+  type:  ClusterIP
+  ports:
+  - name:  server
+    port:  5556
+    targetPort:  5556
